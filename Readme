@@ -1,0 +1,5 @@
+# Need to install "hector-slam" and "hector-navigation" pkgs first
+
+# For demo, please install "navigation-tutorial" pkg first
+==> $ roslaunch rugby_exploration demo_auto_explor.launch 
+

@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+
+<launch>
+  <!-- navigation stage -->
+  <master auto="start"/>
+  <param name="/use_sim_time" value="true"/>
+  <node pkg="stage_ros" type="stageros" name="stageros" args="$(find navigation_stage)/stage_config/worlds/willow-pr2-5cm.world" respawn="false" >
+    <param name="base_watchdog_timeout" value="0.2"/>
+  </node>
+  <include file="$(find rugby_exploration)/launch/demo/slam_gmapping.xml"/>  
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find rugby_exploration)/launch/demo/demo_robot.rviz" />
+
+  <!-- hector exploration -->	
+  <node pkg="hector_exploration_node" type="exploration_planner_node" name="hector_exploration_node" output="screen">
+    <rosparam file="$(find rugby_exploration)/launch/param/auto_explore_costmap.yaml" command="load" />
+  </node>
+
+  <!-- hector simple controller -->
+  <node pkg="hector_exploration_controller" type="simple_exploration_controller" name="simple_exploration_controller" output="screen">
+    <param name="tolerance_trans"     value="0.1"/>
+    <param name="tolerance_rot"       value="0.2"/>
+    <param name="tolerance_timeout"   value="0.5"/>
+    <param name="holonomic"           value="false"/>
+    <param name="max_vel_lin"         value="2.5"/>
+    <param name="max_vel_th"          value="1.0"/>
+    <param name="min_vel_lin"         value="-0.1"/>
+    <param name="min_vel_th"          value="0.0"/>
+    <param name="k_trans"        value="2.0"/>
+    <param name="k_rot"          value="2.0"/>
+    <param name="robot_base_frame"     value="base_footprint"/>
+    <param name="global_frame"         value="map"/>
+  </node>
+</launch>
