@@ -1,9 +1,15 @@
 <?xml version="1.0"?>
 
 <launch>
+  <!-- Launches sensor nodes -->
+  <include file="$(find rugby)/launch/rplidar.launch" />
+	
+  <!-- Start gmapping nodes and its configurations -->
+  <include file="$(find rugby)/launch/includes/gmapping_ekf_config.launch.xml"/>
+
   <!-- hector exploration -->
   <node pkg="hector_exploration_node" type="exploration_planner_node" name="hector_exploration_node" output="screen">
-    <rosparam file="$(find rugby_exploration)/launch/param/auto_explore_costmap.yaml" command="load" />
+    <rosparam file="$(find rugby_exploration)/launch/param/rugby_costmap.yaml" command="load" />
   </node>
 
   <!-- hector simple controller -->
@@ -12,13 +18,14 @@
     <param name="tolerance_rot"       value="0.2"/>
     <param name="tolerance_timeout"   value="0.5"/>
     <param name="holonomic"           value="false"/>
-    <param name="max_vel_lin"         value="2.5"/>
+    <param name="max_vel_lin"         value="0.35"/>
     <param name="max_vel_th"          value="1.0"/>
     <param name="min_vel_lin"         value="-0.1"/>
     <param name="min_vel_th"          value="0.0"/>
     <param name="k_trans"        value="2.0"/>
     <param name="k_rot"          value="2.0"/>
-    <param name="robot_base_frame"     value="base_footprint"/>
+    <param name="robot_base_frame"     value="rugby_base"/>
     <param name="global_frame"         value="map"/>
+    <remap from="cmd_vel" to="/rugby/cmd_vel" />
   </node>
 </launch>
